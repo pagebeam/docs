@@ -4,7 +4,7 @@ import starlightLlmsTxt from 'starlight-llms-txt';
 
 const SITE = 'https://docs.pagebeam.dev';
 const DESCRIPTION =
-  'pagebeam checks every page of your documentation against the application it describes, says how sure it is, and opens the pull request that fixes what it can.';
+  'pagebeam checks each page of your docs against the product it describes, says how sure it is, and opens a pull request with the fixes it can make.';
 
 export default defineConfig({
   site: SITE,
@@ -38,7 +38,10 @@ export default defineConfig({
       ],
       // The order matters: theme.css gives each top-level group its area colour by position.
       sidebar: [
-        { label: 'Get started', items: [{ label: 'Introduction', link: '/' }, 'getting-started'] },
+        {
+          label: 'Get started',
+          items: [{ label: 'Introduction', link: '/' }, 'getting-started', 'getting-started/ci'],
+        },
         { label: 'Checks', items: ['checks', 'checks/standing', 'checks/coverage'] },
         { label: 'Configuration', items: ['configuration'] },
         { label: 'Proposals', items: ['proposals'] },
@@ -49,7 +52,7 @@ export default defineConfig({
           projectName: 'pagebeam',
           description: DESCRIPTION,
           details:
-            'pagebeam is a command line tool, run with `npx pagebeam`. Findings are either proven (the source of truth says so) or review (worth a look, not proof). Only proven findings can fail a build, and only under an enforcing profile.',
+            'pagebeam is a command line tool. Run it with `npx pagebeam`. Each finding is proven (the source of truth says so) or review (worth a look, not proof). Only proven findings can fail a build, and only under an enforcing profile.',
           optionalLinks: [{ label: 'pagebeam source on GitHub', url: 'https://github.com/pagebeam/pagebeam' }],
         }),
       ],

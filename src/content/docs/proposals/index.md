@@ -3,15 +3,15 @@ title: Proposals
 description: How pagebeam drafts fixes with a model you choose, what it sends, and what it refuses.
 ---
 
-A check can prove a page is wrong without being able to say what it should say instead. Name a provider and each of those findings is put to it once, with the page and the evidence already gathered.
+A check can prove a page is wrong without knowing what the page should say. If you name a model provider, pagebeam asks it once about each of those findings. It sends the page and the evidence it already has.
 
-Any endpoint answering the OpenAI chat completions shape works: a provider's own address, a gateway in front of several, or a router on this machine. pagebeam ships no provider code and never sees a key, only the name of the variable holding one. Use `headers` where a provider wants more than a bearer token, and `enrich: false` to keep the provider configured and stop asking it.
+Any endpoint that speaks the OpenAI chat completions API works: a provider, a gateway in front of several, or a router on your machine. pagebeam ships no provider code. It never sees your key, only the name of the variable that holds it. Use `headers` if a provider needs more than a bearer token. Set `enrich: false` to keep the provider in the config but stop asking it.
 
-Proposals are made by `pagebeam fix`. `pagebeam check` never asks a model.
+Only `pagebeam fix` asks a model. `pagebeam check` never does.
 
 ## Skills
 
-Point `skills` at whatever the project already keeps for the people who write its documentation. pagebeam does not read them or decide what counts: they are given to the model as they are, after the rules about how it must answer and what it may not invent, which they cannot displace.
+If your project keeps writing guides for its docs, list them under `skills`:
 
 ```yaml
 model:
@@ -20,13 +20,15 @@ model:
     - docs/TERMS.md
 ```
 
-A file named here that cannot be read stops the run. Anyone who can commit to the repository can change what these say, which is the same trust you already place in what CI runs.
+pagebeam passes them to the model as they are. They come after pagebeam's own rules on how to answer and what not to invent, and they cannot override those rules.
 
-## What leaves this machine
+If a listed file cannot be read, the run stops. Anyone who can commit to the repository can change these files. That is the same trust you already give to what CI runs.
 
-By default: the documentation page, the finding, and the evidence for it.
+## What leaves your machine
 
-Describing a control needs more than its name, so `sendSource: true` also sends the source the controls were found in. That is the product itself rather than its documentation, so it is off until you say otherwise. Every file sent is named in the run's output, and one that looks like it holds a credential is held back and reported rather than sent.
+By default, pagebeam sends the docs page, the finding and its evidence.
+
+Describing a control needs more than its name. With `sendSource: true`, pagebeam also sends the source files the controls were found in. That is your product's code, not its docs, so it is off unless you turn it on. The output names every file sent. A file that looks like it holds a credential is held back and reported instead.
 
 ```yaml
 model:
@@ -35,6 +37,6 @@ model:
 
 ## What is refused
 
-A draft that comes back unchanged, or shorter than half the page it was given, is refused rather than proposed. A provider that cannot answer leaves the finding exactly as it was.
+pagebeam refuses a draft that comes back unchanged, or shorter than half the page it was given. If the provider cannot answer, the finding stays as it was.
 
-Every draft is marked as written by a model. A pull request containing one opens as a draft, because a change worked out from the source says exactly what it replaces and expects to find, while a drafted page is a suggestion about prose nobody has read yet. Set `propose.draft` to decide it yourself.
+Every draft is marked as written by a model. A pull request that contains one opens as a draft. A fix worked out from the source says exactly what it replaces. A drafted page is a suggestion nobody has read yet. Set `propose.draft` to decide this yourself.

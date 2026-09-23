@@ -3,11 +3,11 @@ title: Standing
 description: Every pagebeam finding is proven or review. Only proven findings can fail a build.
 ---
 
-A finding says what its evidence can carry.
+A finding claims only what its evidence supports.
 
-**proven**: the source of truth says so. A built site has no such route. A control was in the application at a known revision and is not now.
+**proven**: the source of truth says so. The built site has no such route. A control was in the application at a known revision and is gone now.
 
-**review**: worth a person's time, and not proof. Absence from what could be read is not absence from the product. A label may be assembled at runtime, or live in an application no parser covers.
+**review**: worth a look, but not proof. pagebeam could not find it, which does not mean the product lacks it. A label may be built at runtime, or live in code no parser reads.
 
 Only `proven` findings can fail a build, and only under an enforcing profile:
 
@@ -15,4 +15,4 @@ Only `proven` findings can fail a build, and only under an enforcing profile:
 pagebeam check --profile enforce
 ```
 
-That fails on proven findings this change introduced. See [the CLI reference](/cli/) for exit codes.
+This fails on proven findings the change introduced. See the [CLI reference](/cli/) for all profiles and exit codes.

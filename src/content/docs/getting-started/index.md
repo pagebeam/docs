@@ -1,30 +1,32 @@
 ---
 title: Getting started
-description: Write a pagebeam config for the documentation you already have, then run your first check.
+description: Write a pagebeam config for the docs you already have, then run your first check.
 ---
 
-Run both commands in the repository holding your documentation.
+Run both commands in the repository that holds your docs:
 
 ```sh
 npx pagebeam init
 npx pagebeam check
 ```
 
-## What init does
+## init
 
-`init` looks at what is there and writes `pagebeam.config.yaml`: the directory your prose lives in, and any application beside it. It says what it worked out and what it could not, so you can correct it before the first run rather than after.
+`init` looks at the repository and writes `pagebeam.config.yaml`. The file says where your pages are and which applications they describe. `init` tells you what it found and what it could not, so you can fix the file before the first run.
 
-Nothing is written outside that one file, and nothing reaches a remote.
+It writes nothing else and sends nothing anywhere.
 
-## What check does
+`init` looks for applications in the folders next to this repository. Check the `apps` it wrote: it may list folders your docs do not describe.
 
-`check` reads and reports. Findings are grouped by the page you would open to act on them, because that is how the work is done: a page at a time, not a finding at a time.
+## check
 
-By default `check` blocks nothing. To fail a build on what a change introduced, see [the enforcing profile](/cli/#profiles).
+`check` reads and reports. It groups findings by page, because you fix docs one page at a time.
 
-## Documentation in another repository
+On its own, `check` blocks nothing. It exits with an error only when it cannot trust its answer, for example when it read nothing. To block on findings, see [profiles](/cli/#profiles).
 
-If your product lives in a different repository from its documentation, check out both and point at them:
+## Docs in another repository
+
+If your product lives in another repository, check out both side by side. The config can live in either one. Here it lives in the product repository and points at the docs:
 
 ```yaml
 docs:
@@ -34,4 +36,4 @@ apps:
     path: .
 ```
 
-Every application the documentation describes gets an entry under `apps`. See [Configuration](/configuration/) for the rest.
+Paths are relative to the folder you run pagebeam in. [Run in CI](/getting-started/ci/) shows the same layout in GitHub Actions. [Configuration](/configuration/) lists every setting.
