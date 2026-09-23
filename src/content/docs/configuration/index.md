@@ -1,9 +1,11 @@
 ---
 title: Configuration
-description: Every key in pagebeam.config.yaml, with an example of each.
+description: The settings in pagebeam.config.yaml, with an example of each.
 ---
 
-`pagebeam.config.yaml` sits beside the documentation. Every setting is checked: one that does not exist is an error, not a shrug.
+`pagebeam.config.yaml` sits next to your docs. pagebeam checks every setting. A setting it does not know is an error.
+
+Paths are relative to the folder you run pagebeam in.
 
 ```yaml
 docs:
@@ -15,7 +17,7 @@ docs:
 history:
   sinceDays: 30 # how far back to compare
 
-apps: # every application the documentation describes
+apps: # every application the docs describe
   - name: dashboard
     path: ../dashboard
     include: ['**/*.{vue,ts,tsx,js}']
@@ -43,24 +45,47 @@ propose:
 
 ## docs
 
-Where the pages are, which files count as pages, and where the built site is. `buildDir` lets `links` check routes against what was actually built. Set `routeBase` when the site serves these pages under a prefix.
+Where the pages are and which files count as pages. `buildDir` is the built site: with it, `links` checks the routes that were really built. Set `routeBase` when the site serves the pages under a prefix.
 
 ## history
 
-How far back `strings` and `moved` compare.
+How far back `strings` and `moved` look.
 
 ## apps
 
-Every application the documentation describes. `envFiles` are the example configs `configKeys` reads. `url`, `routes` and `auth` let pagebeam open a running copy; see [Coverage](/checks/coverage/).
+Every application the docs describe. `configKeys` reads the example configs in `envFiles`. With `url`, `routes` and `auth`, pagebeam also opens a running copy. See [Coverage](/checks/coverage/).
+
+### OpenAPI specifications
+
+The `openapi` check runs only for an application that names its spec. Without one, it reports "no application declares a specification" and does not run.
+
+```yaml
+apps:
+  - name: api
+    path: ../api
+    openapi:
+      spec: ../api/openapi.yaml
+```
 
 ## checks
 
-Settings for each check. `strings` and `moved` are off until they appear here; see [Checks](/checks/).
+Settings for each check. `strings` and `moved` stay off until they appear here. See [Checks](/checks/).
 
 ## model
 
-The provider asked to draft fixes. See [Proposals](/proposals/).
+The provider that drafts fixes. See [Proposals](/proposals/).
 
 ## propose
 
-The branch, base and commit type used when `fix --publish` opens or updates the pull request.
+The branch, base and commit type that `fix --publish` uses for its pull request.
+
+## Ignoring a finding
+
+To leave a finding out of every report, list its id in `.pagebeam/ignore.yml`, inside the folder you run pagebeam in. Say why, and who decided.
+
+```yaml
+findings:
+  - id: 9f3a1c07b2e4
+    reason: The CDN serves this route, not the site
+    by: docs-team
+```
