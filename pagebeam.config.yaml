@@ -1,0 +1,7 @@
+docs:
+  root: src/content/docs
+  buildDir: dist
+
+apps:
+  - name: pagebeam
+    path: ../pagebeam

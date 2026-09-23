@@ -1,0 +1,6 @@
+node_modules/
+dist/
+.astro/
+public/brand/
+public/favicon.ico
+src/assets/brand/

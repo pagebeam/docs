@@ -1,0 +1,32 @@
+name: docs
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: docs
+          fetch-depth: 0
+      # The docs describe the pagebeam CLI, so drift is judged against its source.
+      - uses: actions/checkout@v4
+        with:
+          repository: pagebeam/pagebeam
+          path: pagebeam
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: docs/package-lock.json
+      - run: npm ci
+        working-directory: docs
+      - run: npm run check
+        working-directory: docs
+      - name: pagebeam checks its own documentation
+        run: npm run drift
+        working-directory: docs

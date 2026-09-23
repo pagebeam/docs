@@ -1,0 +1,158 @@
+/*
+ * The only place a colour, radius, shadow or gradient is defined.
+ * Dark values live in one block keyed on data-theme; each site sets that
+ * attribute before first paint, so there is no second copy under a media query.
+ */
+:root {
+  color-scheme: light;
+
+  --ground: oklch(98.5% 0.003 265);
+  --surface: oklch(100% 0 0);
+  --surface-sunken: oklch(96.2% 0.006 265);
+  --line: oklch(90% 0.008 265);
+  --ink: oklch(23% 0.017 265);
+  --ink-muted: oklch(47% 0.017 265);
+
+  --brand: oklch(55.5% 0.215 345);
+  --on-brand: oklch(100% 0 0);
+  --brand-ink: oklch(50% 0.2 345);
+  --brand-soft: oklch(95.5% 0.03 345);
+
+  --band-dark: oklch(20% 0.018 265);
+  --band-dark-ink: oklch(96% 0.005 265);
+  --band-dark-muted: oklch(77% 0.012 265);
+  --band-dark-line: oklch(32% 0.018 265);
+  --band-dark-raised: oklch(26.5% 0.02 265);
+  --band-dark-brand: oklch(78% 0.14 345);
+  --band-mist: oklch(94.5% 0.006 265);
+
+  --hero-from: oklch(24% 0.02 265);
+  --hero-to: oklch(50% 0.2 348);
+  --on-hero: oklch(100% 0 0);
+  --hero-well: oklch(0% 0 0 / 0.24);
+
+  --mark-paper: oklch(93% 0.008 265);
+  --mark-line: oklch(28% 0.025 265);
+
+  --proven-ink: oklch(50% 0.19 27);
+  --proven-soft: oklch(95.5% 0.028 27);
+  --review-ink: oklch(50% 0.11 65);
+  --review-soft: oklch(96% 0.05 88);
+  --info-ink: oklch(50% 0.15 255);
+  --info-soft: oklch(95.5% 0.025 255);
+  --clear-ink: oklch(48% 0.12 150);
+  --clear-soft: oklch(95.5% 0.04 150);
+
+  --area-start-ink: oklch(50% 0.13 190);
+  --area-start-tile: oklch(95% 0.03 190);
+  --area-checks-ink: oklch(50% 0.13 250);
+  --area-checks-tile: oklch(95% 0.03 250);
+  --area-config-ink: oklch(50% 0.13 50);
+  --area-config-tile: oklch(95% 0.03 50);
+  --area-propose-ink: oklch(50% 0.13 295);
+  --area-propose-tile: oklch(95% 0.03 295);
+  --area-cli-ink: oklch(50% 0.13 145);
+  --area-cli-tile: oklch(95% 0.03 145);
+
+  --term-bg: oklch(21% 0.02 265);
+  --term-fg: oklch(97% 0.004 265);
+  --term-dim: oklch(80% 0.012 265);
+  --term-rule: oklch(100% 0 0 / 0.12);
+  --term-edge: oklch(100% 0 0 / 0);
+  --term-raised: oklch(28% 0.02 265);
+  --term-red: oklch(72% 0.16 25);
+  --term-yellow: oklch(86% 0.14 90);
+  --term-blue: oklch(76% 0.11 250);
+  --term-green: oklch(80% 0.15 150);
+
+  --glass: oklch(100% 0 0 / 0.8);
+
+  --elevation-1: 0 1px 2px 0 rgb(0 0 0 / 0.03), 0 1px 3px 1px rgb(0 0 0 / 0.04);
+  --elevation-2: 0 1px 2px 0 rgb(0 0 0 / 0.03), 0 2px 6px 2px rgb(0 0 0 / 0.06);
+  --elevation-3: 0 4px 8px 3px rgb(0 0 0 / 0.05), 0 1px 3px rgb(0 0 0 / 0.08);
+  --elevation-4: 0 6px 10px 4px rgb(0 0 0 / 0.06), 0 2px 3px rgb(0 0 0 / 0.08);
+  --elevation-5: 0 8px 12px 6px rgb(0 0 0 / 0.08), 0 4px 4px rgb(0 0 0 / 0.1);
+
+  --hero: linear-gradient(135deg, var(--hero-from) 0%, var(--hero-to) 100%);
+
+  --radius-control: 4px;
+  --radius-card: 8px;
+  --radius-pill: 999px;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-24: 96px;
+  --cell-y: 6px;
+  --cell-x: 10px;
+
+  --font-sans: 'Ubuntu', system-ui, sans-serif;
+  --font-mono: 'Ubuntu Mono', ui-monospace, monospace;
+
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+  --dur: 150ms;
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --ground: oklch(16.5% 0.012 265);
+  --surface: oklch(20.5% 0.013 265);
+  --surface-sunken: oklch(24.5% 0.014 265);
+  --line: oklch(34% 0.016 265);
+  --ink: oklch(96.5% 0.005 265);
+  --ink-muted: oklch(75% 0.012 265);
+
+  --brand: oklch(74% 0.16 345);
+  --on-brand: oklch(19% 0.03 345);
+  --brand-ink: oklch(81% 0.12 345);
+  --brand-soft: oklch(30% 0.07 345);
+
+  --band-dark: oklch(10.5% 0.01 265);
+  --band-dark-ink: oklch(96% 0.005 265);
+  --band-dark-muted: oklch(77% 0.012 265);
+  --band-dark-line: oklch(26% 0.014 265);
+  --band-dark-raised: oklch(16.5% 0.012 265);
+  --band-dark-brand: oklch(78% 0.14 345);
+  --band-mist: oklch(26% 0.014 265);
+
+  --mark-paper: oklch(32% 0.02 265);
+  --mark-line: oklch(93% 0.01 265);
+
+  --proven-ink: oklch(80% 0.12 27);
+  --proven-soft: oklch(30% 0.075 27);
+  --review-ink: oklch(85% 0.12 82);
+  --review-soft: oklch(30% 0.055 70);
+  --info-ink: oklch(81% 0.1 255);
+  --info-soft: oklch(30% 0.06 255);
+  --clear-ink: oklch(82% 0.13 150);
+  --clear-soft: oklch(30% 0.06 150);
+
+  --area-start-ink: oklch(82% 0.1 190);
+  --area-start-tile: oklch(30% 0.06 190);
+  --area-checks-ink: oklch(82% 0.1 250);
+  --area-checks-tile: oklch(30% 0.06 250);
+  --area-config-ink: oklch(82% 0.1 50);
+  --area-config-tile: oklch(30% 0.06 50);
+  --area-propose-ink: oklch(82% 0.1 295);
+  --area-propose-tile: oklch(30% 0.06 295);
+  --area-cli-ink: oklch(82% 0.1 145);
+  --area-cli-tile: oklch(30% 0.06 145);
+
+  --term-bg: oklch(12% 0.012 265);
+  --term-edge: oklch(100% 0 0 / 0.16);
+  --term-raised: oklch(22% 0.016 265);
+
+  --glass: oklch(20.5% 0.013 265 / 0.8);
+
+  --elevation-1: 0 1px 2px 0 rgb(0 0 0 / 0.5), 0 1px 3px 1px rgb(0 0 0 / 0.3);
+  --elevation-2: 0 1px 2px 0 rgb(0 0 0 / 0.5), 0 2px 6px 2px rgb(0 0 0 / 0.35);
+  --elevation-3: 0 4px 8px 3px rgb(0 0 0 / 0.4), 0 1px 3px rgb(0 0 0 / 0.5);
+  --elevation-4: 0 6px 10px 4px rgb(0 0 0 / 0.45), 0 2px 3px rgb(0 0 0 / 0.5);
+  --elevation-5: 0 8px 12px 6px rgb(0 0 0 / 0.5), 0 4px 4px rgb(0 0 0 / 0.55);
+}

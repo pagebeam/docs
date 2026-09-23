@@ -1,0 +1,144 @@
+@import '../../brand/fonts.css';
+@import '../../brand/tokens.css';
+
+/* Starlight's own variables, pointed at the brand tokens. The tokens switch
+   with data-theme themselves, so one mapping serves both themes. */
+:root {
+  --sl-font: var(--font-sans);
+  --sl-font-mono: var(--font-mono);
+
+  --sl-color-white: var(--ink);
+  --sl-color-gray-1: var(--ink);
+  --sl-color-gray-2: var(--ink);
+  --sl-color-gray-3: var(--ink-muted);
+  --sl-color-gray-4: var(--ink-muted);
+  --sl-color-gray-5: var(--line);
+  --sl-color-gray-6: var(--surface-sunken);
+  --sl-color-gray-7: var(--ground);
+  --sl-color-black: var(--surface);
+
+  --sl-color-accent-low: var(--brand-soft);
+  --sl-color-accent: var(--brand);
+  --sl-color-accent-high: var(--brand-ink);
+
+  --sl-color-text: var(--ink);
+  --sl-color-text-accent: var(--brand-ink);
+  --sl-color-text-invert: var(--on-brand);
+  --sl-color-bg: var(--surface);
+  --sl-color-bg-nav: var(--glass);
+  --sl-color-bg-sidebar: var(--ground);
+  --sl-color-bg-inline-code: var(--surface-sunken);
+  --sl-color-bg-accent: var(--brand);
+  --sl-color-hairline-light: var(--line);
+  --sl-color-hairline: var(--line);
+  --sl-color-hairline-shade: var(--line);
+
+  /* Asides carry status, so they take the status tokens. */
+  --sl-color-blue-low: var(--info-soft);
+  --sl-color-blue: var(--info-ink);
+  --sl-color-blue-high: var(--info-ink);
+  --sl-color-green-low: var(--clear-soft);
+  --sl-color-green: var(--clear-ink);
+  --sl-color-green-high: var(--clear-ink);
+  --sl-color-orange-low: var(--review-soft);
+  --sl-color-orange: var(--review-ink);
+  --sl-color-orange-high: var(--review-ink);
+  --sl-color-red-low: var(--proven-soft);
+  --sl-color-red: var(--proven-ink);
+  --sl-color-red-high: var(--proven-ink);
+  --sl-color-purple-low: var(--brand-soft);
+  --sl-color-purple: var(--brand-ink);
+  --sl-color-purple-high: var(--brand-ink);
+}
+
+.header {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Each top-level sidebar group owns one area colour, by its position in the
+   sidebar config: the current page is filled in that colour. */
+.sidebar-content .top-level > li:nth-child(1) {
+  --area-ink: var(--area-start-ink);
+  --area-tile: var(--area-start-tile);
+}
+
+.sidebar-content .top-level > li:nth-child(2) {
+  --area-ink: var(--area-checks-ink);
+  --area-tile: var(--area-checks-tile);
+}
+
+.sidebar-content .top-level > li:nth-child(3) {
+  --area-ink: var(--area-config-ink);
+  --area-tile: var(--area-config-tile);
+}
+
+.sidebar-content .top-level > li:nth-child(4) {
+  --area-ink: var(--area-propose-ink);
+  --area-tile: var(--area-propose-tile);
+}
+
+.sidebar-content .top-level > li:nth-child(5) {
+  --area-ink: var(--area-cli-ink);
+  --area-tile: var(--area-cli-tile);
+}
+
+.sidebar-content .top-level > li > details > summary .group-label::before {
+  content: '';
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 10px;
+  border-radius: var(--radius-pill);
+  background: var(--area-ink);
+  vertical-align: middle;
+}
+
+.sidebar-content a {
+  border-radius: var(--radius-control);
+}
+
+.sidebar-content a[aria-current='page'],
+.sidebar-content a[aria-current='page']:hover,
+.sidebar-content a[aria-current='page']:focus {
+  background: var(--area-tile);
+  color: var(--area-ink);
+  font-weight: 600;
+}
+
+/* Buttons are square in this brand; chips stay pills. */
+.sl-link-button,
+.sl-link-button.primary {
+  border-radius: var(--radius-control);
+}
+
+.sl-markdown-content table {
+  font-size: 0.95em;
+}
+
+.sl-markdown-content :is(th, td) {
+  padding: var(--cell-y) var(--cell-x);
+}
+
+.expressive-code .frame {
+  --header-border-radius: var(--radius-card);
+}
+
+/* Starlight sizes "On this page" as its base width plus half of any spare
+   screen width, which makes it huge on wide monitors. Hold it at a fixed width
+   and give the spare width to the article instead. */
+:root {
+  --pb-toc-width: 15rem;
+  --sl-content-width: 50rem;
+}
+
+@media (min-width: 72rem) {
+  .right-sidebar-container {
+    width: var(--pb-toc-width);
+  }
+
+  [data-has-sidebar][data-has-toc] .main-pane {
+    --sl-content-margin-inline: auto;
+    width: calc(100% - var(--pb-toc-width));
+  }
+}
