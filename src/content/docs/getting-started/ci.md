@@ -1,59 +1,37 @@
 ---
 title: Run in CI
-description: Check your docs on every pull request with GitHub Actions, including when the product lives in another repository.
+description: Check your docs on every pull request with the pagebeam GitHub Action, including when the product lives in another repository.
 ---
 
-pagebeam reads files. In CI, the docs and every application in the config must be checked out, at the paths the config gives.
+The pagebeam action checks out every repository the docs describe, runs pagebeam from the docs, and writes what it found to the job summary.
 
-## Docs and product in one repository
+## Check every pull request
+
+Add one workflow to the product repository. It runs when the product changes, which is when the docs start to go wrong.
 
 ```yaml
-name: docs
+name: docs drift
 
-on: [pull_request]
+on:
+  pull_request:
+  push:
+    branches: [main]
 
 jobs:
-  pagebeam:
+  drift:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: pagebeam/pagebeam@v1
         with:
-          fetch-depth: 0
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-      - run: npx pagebeam check --profile enforce
+          docs: your-org/docs
+          token: ${{ secrets.PAGEBEAM_TOKEN }}
 ```
 
-`fetch-depth: 0` fetches the full history. pagebeam needs it to tell whether a finding is new. Without it, `enforce` never blocks.
+Leave out `docs` when the docs live in the same repository as the product.
 
-## Docs in another repository
+## Where the repositories go
 
-`apps[].path` is a folder. Check out both repositories side by side so the folder exists:
-
-```yaml
-steps:
-  - uses: actions/checkout@v4
-    with:
-      path: docs
-      fetch-depth: 0
-  - uses: actions/checkout@v4
-    with:
-      repository: acme/dashboard
-      path: dashboard
-      fetch-depth: 0
-      # a private repository needs a token that can read it:
-      # token: ${{ secrets.DASHBOARD_READ_TOKEN }}
-  - uses: actions/setup-node@v4
-    with:
-      node-version: 22
-  - run: npx pagebeam check --profile enforce
-    working-directory: docs
-```
-
-Both checkouts need `fetch-depth: 0`. `strings` and `moved` read the product's history, not the docs' history.
-
-The config in `docs/` then points one folder up:
+The action checks out each repository inside the workspace at `<owner>/<name>`, with its full history. Repositories with the same owner sit next to each other, so the config in the docs repository points one folder up, just as it does on a laptop:
 
 ```yaml
 apps:
@@ -61,8 +39,70 @@ apps:
     path: ../dashboard
 ```
 
-These docs run the same way. Their workflow checks out the pagebeam CLI next to them and checks every pull request.
+For a repository with another owner, the path goes through its owner: `../../other-org/dashboard`.
 
-## Choosing a profile
+A later step in the same job finds a repository at `$GITHUB_WORKSPACE/<owner>/<name>`, not at the workspace root.
+
+## Fail a pull request that breaks the docs
+
+```yaml
+- uses: pagebeam/pagebeam@v1
+  with:
+    docs: your-org/docs
+    profile: enforce
+    token: ${{ secrets.PAGEBEAM_TOKEN }}
+```
 
 `enforce` blocks only on proven findings that the change introduced. A link is checked against today's build, and there is no older build to compare with. So pagebeam cannot tell whether a broken link is new, and `enforce` only reports it. Use `enforce-all` to block on every proven finding. See [profiles](/cli/#profiles).
+
+## Propose fixes on a schedule
+
+In the docs repository, name the products and let pagebeam open or update one pull request with the fixes it can work out:
+
+```yaml
+on:
+  schedule:
+    - cron: '0 6 * * *'
+
+jobs:
+  drift:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: pagebeam/pagebeam@v1
+        with:
+          products: |
+            your-org/dashboard
+          command: fix
+          publish: 'true'
+          token: ${{ secrets.PAGEBEAM_TOKEN }}
+```
+
+To have a model draft what the source cannot settle, pass its key as `model-key` and name the variable your config's `model.apiKeyEnv` expects in `model-key-env`. See [proposals](/proposals/).
+
+## Tokens
+
+The job's own token reaches only the repository the workflow runs in. To read another repository, or open a pull request in one, pass a token that can. A GitHub App installation token is the narrowest. To publish in the repository the workflow runs in, give the job `contents: write` and `pull-requests: write`.
+
+## Inputs
+
+| Input           | Meaning                                                          | Default                |
+| --------------- | ---------------------------------------------------------------- | ---------------------- |
+| `docs`          | The docs repository, as owner/name, when it is not this one      | this repository        |
+| `docs-ref`      | The branch of the docs repository to read                        | its default branch     |
+| `products`      | Other product repositories to check out, one owner/name per line | none                   |
+| `command`       | `check` to report, `fix` to propose                              | `check`                |
+| `profile`       | `observe`, `enforce` or `enforce-all`                            | `observe`              |
+| `publish`       | With `fix`, open or update the pull request                      | `false`                |
+| `cwd`           | The folder holding the config, relative to the workspace         | the docs checkout      |
+| `token`         | Reads the other repositories and opens the pull request          | the job's own token    |
+| `model-key`     | Your model provider's key, as a secret                           | none                   |
+| `model-key-env` | The variable your config's `model.apiKeyEnv` names               | `OPENAI_API_KEY`       |
+| `version`       | The pagebeam release to run                                      | the release you pinned |
+
+The action's output `said` holds what the run printed.
+
+## Other CI systems
+
+pagebeam reads files, so any CI works. Check out the docs and every application at the paths the config gives, with full history (`fetch-depth: 0` on GitHub), then run `npx pagebeam check` from the docs. Without the history pagebeam cannot tell whether a finding is new, and `enforce` never blocks.
+
+These docs are checked this way. Their workflow checks out the pagebeam CLI next to them on every pull request.
