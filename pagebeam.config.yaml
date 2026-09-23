@@ -1,6 +1,17 @@
+# These docs are checked against the pagebeam CLI they describe.
+#
+# The CLI lives in its own repository, github.com/pagebeam/pagebeam.
+# Paths here are relative to this folder, so the CLI must be checked out
+# next to it:
+#
+#   workspace/
+#     docs/       this repository
+#     pagebeam/   the CLI
+#
+# .github/workflows/docs.yml checks both out this way.
 docs:
   root: src/content/docs
-  buildDir: dist
+  buildDir: dist # npm run build makes it, so links checks the real routes
 
 apps:
   - name: pagebeam

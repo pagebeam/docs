@@ -13,11 +13,12 @@ jobs:
         with:
           path: docs
           fetch-depth: 0
-      # The docs describe the pagebeam CLI, so drift is judged against its source.
+      # The docs describe the pagebeam CLI, so they are checked against its source.
       - uses: actions/checkout@v4
         with:
           repository: pagebeam/pagebeam
           path: pagebeam
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 22
