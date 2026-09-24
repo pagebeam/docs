@@ -45,7 +45,7 @@ propose:
 
 ## docs
 
-Where the pages are and which files count as pages. `buildDir` is the built site: with it, `links` checks the routes that were really built. Set `routeBase` when the site serves the pages under a prefix.
+Where the pages are and which files count as pages. `buildDir` is the built site: with it, `links` checks the routes that were really built. Without it, pagebeam looks for a build next to the config and next to the docs site's own folder, and uses it when most of the pages are in it. [`--build`](/cli/#building-the-docs-site) makes one. Set `routeBase` when the site serves the pages under a prefix.
 
 ## history
 
@@ -53,7 +53,7 @@ How far back `strings` and `moved` look.
 
 ## apps
 
-Every application the docs describe. `configKeys` reads the example configs in `envFiles`. With `url`, `routes` and `auth`, pagebeam also opens a running copy. See [Coverage](/checks/coverage/).
+Every application the docs describe. `configKeys` counts a setting as defined when an example config in `envFiles` lists it or the application's code reads it, such as `env('X')` or `process.env.X`. `vendor/` and `node_modules/` are not read. With `url`, `routes` and `auth`, pagebeam also opens a running copy. See [Coverage](/checks/coverage/).
 
 ### OpenAPI specifications
 

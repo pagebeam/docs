@@ -93,6 +93,7 @@ The job's own token reaches only the repository the workflow runs in. To read an
 | `command`       | `check` to report, `fix` to propose                              | `check`                |
 | `profile`       | `observe`, `enforce` or `enforce-all`                            | `observe`              |
 | `publish`       | With `fix`, open or update the pull request                      | `false`                |
+| `build`         | Build the docs site first: `auto`, `true` or `false`             | `auto`                 |
 | `cwd`           | The folder holding the config, relative to the workspace         | the docs checkout      |
 | `token`         | Reads the other repositories and opens the pull request          | the job's own token    |
 | `model-key`     | Your model provider's key, as a secret                           | none                   |
