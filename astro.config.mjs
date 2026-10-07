@@ -43,7 +43,7 @@ export default defineConfig({
           items: [{ label: 'Introduction', link: '/' }, 'getting-started', 'getting-started/ci'],
         },
         { label: 'Checks', items: ['checks', 'checks/standing', 'checks/coverage'] },
-        { label: 'Configuration', items: ['configuration'] },
+        { label: 'Configuration', items: ['configuration', 'configuration/guided-screenshots'] },
         { label: 'Proposals', items: ['proposals'] },
         { label: 'CLI reference', items: ['cli'] },
       ],
