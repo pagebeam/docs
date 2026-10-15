@@ -134,6 +134,7 @@ Each step does exactly one thing:
 | `wait: selector` or `wait: 500`               | Waits for an element to show, or for milliseconds            |
 | `expect: { selector, text? }`                 | Stops the run unless the element shows, with `text` if given |
 | `shot: { name, caption?, focus?, fullPage? }` | Saves a screenshot                                           |
+| `say: text` or `say: { text, ms? }`           | A narration line. Only a recording waits for it              |
 
 Steps run again for each viewport, so a step that creates something creates it once per viewport.
 
@@ -167,12 +168,73 @@ Each run of a journey replaces that journey's screenshots and manifest. Every sh
 
 `step` counts from `0`. `focus` boxes are in image pixels, scale included, so they can be drawn straight onto the image. For a viewport shot, the first focus element is scrolled into view first. `sha` is the commit checked out in the folder you run pagebeam in, or `null` outside a git repository.
 
+## Recording
+
+`record: true` on a journey also saves it as a video, once per viewport:
+
+```yaml
+journeys:
+  write-a-note:
+    account: writer
+    record: true
+    steps:
+      - goto: /notes
+      - say: Every note you write is here
+      - click: '#new'
+      - fill: { selector: '#title', value: Weekend plans }
+      - say: { text: Give it a title and it is saved, ms: 2400 }
+```
+
+The video moves a drawn pointer to each element before it acts, types one letter at a time, and holds after each step. The pointer is kept out of screenshots. To change the pace, give `record` its settings instead of `true`:
+
+| Setting  | Meaning                                          | Default |
+| -------- | ------------------------------------------------ | ------- |
+| `typeMs` | Milliseconds between typed letters               | `70`    |
+| `moveMs` | Milliseconds the pointer takes to reach a target | `500`   |
+| `holdMs` | Milliseconds to wait after each step             | `700`   |
+| `cursor` | Draw the pointer                                 | `true`  |
+
+The video is `recording.<viewport>.mp4` beside the screenshots, at the viewport's size: a 1280 by 800 viewport gives a 1280 by 800 video. The manifest lists each recording with a timeline:
+
+```json
+{
+  "file": "recording.desktop.mp4",
+  "viewport": { "name": "desktop", "width": 1280, "height": 800 },
+  "durationMs": 9120,
+  "timeline": [
+    { "step": 0, "action": "goto /notes", "at": 480, "until": 1730 },
+    { "step": 1, "action": "say", "at": 1730, "until": 4130, "say": "Every note you write is here" },
+    {
+      "step": 2,
+      "action": "click #new",
+      "at": 1730,
+      "until": 2960,
+      "box": { "x": 100, "y": 50, "width": 200, "height": 40 }
+    }
+  ]
+}
+```
+
+`at` and `until` are milliseconds from the start of the video. `box` is where the element sat, in video pixels, so a zoom or a caption can be placed on it.
+
+### Narration
+
+A `say` line starts where it sits in the steps. The steps after it carry on while it is said, and the next line waits until it has finished, so speech plays over what is done. The video runs until the last line ends.
+
+A line lasts `ms` when given, or 400 milliseconds a word otherwise. Once the narration is recorded or generated, pass the real length of each clip with `--narration`:
+
+```json
+{ "write-a-note": [2650, 2310] }
+```
+
+The lengths follow the order of the journey's `say` steps and override `ms`. A count that does not match the journey's lines stops the run before a browser starts. Each line's `at` in the timeline is where its clip goes in the video.
+
 ## Exit codes
 
-| Code | Meaning                                                                                    |
-| ---- | ------------------------------------------------------------------------------------------ |
-| `0`  | Every journey was followed and saved                                                       |
-| `1`  | An account did not sign in or is not ready, or a step failed                               |
-| `2`  | Nothing was shot: no tours, an unknown target or journey, an unset variable, or no browser |
+| Code | Meaning                                                                                              |
+| ---- | ---------------------------------------------------------------------------------------------------- |
+| `0`  | Every journey was followed and saved                                                                 |
+| `1`  | An account did not sign in or is not ready, or a step failed                                         |
+| `2`  | Nothing was shot: no tours, an unknown target or journey, an unset variable, or no browser or ffmpeg |
 
-`shoot` needs Chrome or Chromium installed and the `playwright-core` package.
+`shoot` needs Chrome or Chromium installed and the `playwright-core` package. A recorded journey also needs `ffmpeg` on the path.

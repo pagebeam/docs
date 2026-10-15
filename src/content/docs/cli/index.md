@@ -7,7 +7,7 @@ description: pagebeam commands, options, profiles and exit codes.
 pagebeam init  [--cwd <dir>]
 pagebeam check [--cwd <dir>] [--json] [--profile observe|enforce|enforce-all] [--build | --build=auto]
 pagebeam fix   [--cwd <dir>] [--publish] [--build | --build=auto]
-pagebeam shoot [--cwd <dir>] [--target <name>] [--journey <name>] [--out <dir>] [--json]
+pagebeam shoot [--cwd <dir>] [--target <name>] [--journey <name>] [--out <dir>] [--narration <file>] [--json]
 ```
 
 | Command                  | Does                                           |
@@ -31,6 +31,7 @@ pagebeam shoot [--cwd <dir>] [--target <name>] [--journey <name>] [--out <dir>] 
 | `--target`     | `shoot`: the target to open. Default: `local`, else the first          |
 | `--journey`    | `shoot`: follow only this journey. Default: every journey              |
 | `--out`        | `shoot`: where screenshots go. Default: `.pagebeam/shots`              |
+| `--narration`  | `shoot`: a JSON file of how long each journey's `say` lines take       |
 
 ## Profiles
 
