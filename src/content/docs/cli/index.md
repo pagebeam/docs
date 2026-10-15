@@ -7,6 +7,7 @@ description: pagebeam commands, options, profiles and exit codes.
 pagebeam init  [--cwd <dir>]
 pagebeam check [--cwd <dir>] [--json] [--profile observe|enforce|enforce-all] [--build | --build=auto]
 pagebeam fix   [--cwd <dir>] [--publish] [--build | --build=auto]
+pagebeam shoot [--cwd <dir>] [--target <name>] [--journey <name>] [--out <dir>] [--json]
 ```
 
 | Command                  | Does                                           |
@@ -15,6 +16,7 @@ pagebeam fix   [--cwd <dir>] [--publish] [--build | --build=auto]
 | `pagebeam check`         | Reports everything and blocks nothing          |
 | `pagebeam fix`           | Says what it would propose and changes nothing |
 | `pagebeam fix --publish` | Opens or updates the pull request              |
+| `pagebeam shoot`         | Follows journeys and saves screenshots         |
 
 ## Options
 
@@ -26,6 +28,9 @@ pagebeam fix   [--cwd <dir>] [--publish] [--build | --build=auto]
 | `--profile`    | What blocks. See below                                                 |
 | `--build`      | Build the docs site first. See below                                   |
 | `--build=auto` | Build only a docs site of its own whose framework is recognised        |
+| `--target`     | `shoot`: the target to open. Default: `local`, else the first          |
+| `--journey`    | `shoot`: follow only this journey. Default: every journey              |
+| `--out`        | `shoot`: where screenshots go. Default: `.pagebeam/shots`              |
 
 ## Profiles
 
@@ -52,3 +57,5 @@ This runs the site's own code, so it happens only when you ask. A build that fai
 | `0`  | Nothing blocks                                                                                               |
 | `1`  | A proven finding blocks, under an enforcing profile                                                          |
 | `2`  | The answer cannot be trusted: nothing was read, a requested check could not run, or a requested build failed |
+
+`shoot` has its own exit codes. See [Guided screenshots](/configuration/guided-screenshots/#exit-codes).

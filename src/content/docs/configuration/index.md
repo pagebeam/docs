@@ -79,6 +79,10 @@ The provider that drafts fixes. See [Proposals](/proposals/).
 
 The branch, base and commit type that `fix --publish` uses for its pull request.
 
+## tours
+
+Journeys through a running copy of the app that `pagebeam shoot` follows, signed in as named accounts, to save screenshots. See [Guided screenshots](/configuration/guided-screenshots/).
+
 ## Ignoring a finding
 
 To leave a finding out of every report, list its id in `.pagebeam/ignore.yml`, inside the folder you run pagebeam in. Say why, and who decided.
