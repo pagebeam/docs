@@ -134,7 +134,8 @@ Each step does exactly one thing:
 | `wait: selector` or `wait: 500`               | Waits for an element to show, or for milliseconds            |
 | `expect: { selector, text? }`                 | Stops the run unless the element shows, with `text` if given |
 | `shot: { name, caption?, focus?, fullPage? }` | Saves a screenshot                                           |
-| `say: text` or `say: { text, ms? }`           | A narration line. Only a recording waits for it              |
+
+Any step can also carry `note`: what it does and why, in words. A note is never spoken or shown. It is copied into the manifest, so a script for a recording can be written from it.
 
 Steps run again for each viewport, so a step that creates something creates it once per viewport.
 
@@ -179,10 +180,11 @@ journeys:
     record: true
     steps:
       - goto: /notes
-      - say: Every note you write is here
+        note: Every note you write is in one list
       - click: '#new'
+        note: A new note starts from anywhere
       - fill: { selector: '#title', value: Weekend plans }
-      - say: { text: Give it a title and it is saved, ms: 2400 }
+        note: A title is all it needs, and it saves as you type
 ```
 
 The video moves a drawn pointer to each element before it acts, types one letter at a time, and holds after each step. The pointer is kept out of screenshots. To change the pace, give `record` its settings instead of `true`:
@@ -202,14 +204,14 @@ The video is `recording.<viewport>.mp4` beside the screenshots, at the viewport'
   "viewport": { "name": "desktop", "width": 1280, "height": 800 },
   "durationMs": 9120,
   "timeline": [
-    { "step": 0, "action": "goto /notes", "at": 480, "until": 1730 },
-    { "step": 1, "action": "say", "at": 1730, "until": 4130, "say": "Every note you write is here" },
+    { "step": 0, "action": "goto /notes", "at": 480, "until": 1730, "note": "Every note you write is in one list" },
     {
-      "step": 2,
+      "step": 1,
       "action": "click #new",
       "at": 1730,
       "until": 2960,
-      "box": { "x": 100, "y": 50, "width": 200, "height": 40 }
+      "box": { "x": 100, "y": 50, "width": 200, "height": 40 },
+      "note": "A new note starts from anywhere"
     }
   ]
 }
@@ -219,15 +221,17 @@ The video is `recording.<viewport>.mp4` beside the screenshots, at the viewport'
 
 ### Narration
 
-A `say` line starts where it sits in the steps. The steps after it carry on while it is said, and the next line waits until it has finished, so speech plays over what is done. The video runs until the last line ends.
-
-A line lasts `ms` when given, or 400 milliseconds a word otherwise. Once the narration is recorded or generated, pass the real length of each clip with `--narration`:
+Write the voice over from the timeline: each step's `action`, `note` and timing say what is on screen and when. Once the lines are recorded or generated, record again with the length of each step's line, by journey and step number:
 
 ```json
-{ "write-a-note": [2650, 2310] }
+{ "write-a-note": { "1": 2650, "2": 2310 } }
 ```
 
-The lengths follow the order of the journey's `say` steps and override `ms`. A count that does not match the journey's lines stops the run before a browser starts. Each line's `at` in the timeline is where its clip goes in the video.
+```sh
+npx pagebeam shoot --narration narration.json
+```
+
+A step with a length holds until its line has been said, so the next step starts after it. Each step's `at` in the new timeline is where its line goes in the video. A step number that does not exist, or names a `shot`, stops the run before a browser starts.
 
 ## Exit codes
 
