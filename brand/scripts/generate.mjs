@@ -35,7 +35,8 @@ const paint = (t) => ({
   paper: hex(t['mark-paper']),
   line: hex(t['mark-line']),
   brand: hex(t.brand),
-  cut: hex(t.surface),
+  on: hex(t['on-brand']),
+  cut: hex(t['mark-cut']),
 });
 const ink = (t) => ({ word: hex(t.ink), beam: hex(t['brand-ink']) });
 
@@ -62,7 +63,7 @@ function lockup(id, t) {
 
 // One file that follows the browser's colour scheme, for the tab icon.
 function adaptiveFavicon(id) {
-  const roles = ['paper', 'line', 'brand', 'cut'];
+  const roles = ['paper', 'line', 'brand', 'on', 'cut'];
   const vars = Object.fromEntries(roles.map((r) => [r, `var(--${r})`]));
   const decl = (t) => roles.map((r) => `--${r}:${paint(t)[r]}`).join(';');
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><style>svg{${decl(light)}}@media (prefers-color-scheme:dark){svg{${decl(dark)}}}</style>${marks[id].draw(vars)}</svg>`;
@@ -70,7 +71,7 @@ function adaptiveFavicon(id) {
 
 function card(label, width = 1200, height = 630) {
   const w = wordmark(300, 262, 108, { word: hex(light['band-dark-ink']), beam: hex(light['band-dark-brand']) });
-  const mark = `<g transform="translate(96 150) scale(2.9)">${marks[PRIMARY].draw(paint(light))}</g>`;
+  const mark = `<g transform="translate(96 150) scale(2.9)">${marks[PRIMARY].draw({ ...paint(dark), cut: hex(light['band-dark']) })}</g>`;
   return `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}" viewBox="0 0 ${width} ${height}">
 <rect width="${width}" height="${height}" fill="${hex(light['band-dark'])}"/>
 <rect x="0" y="${height - 10}" width="${width}" height="10" fill="${hex(light.brand)}"/>

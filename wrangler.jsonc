@@ -6,4 +6,5 @@
     "not_found_handling": "404-page",
   },
   "routes": [{ "pattern": "docs.pagebeam.dev", "custom_domain": true }],
+  "previews": {},
 }

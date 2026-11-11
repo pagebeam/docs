@@ -38,4 +38,7 @@ export const markPairs = [
   ['brand', 'ground'],
   ['brand', 'band-dark'],
   ['mark-line', 'mark-paper'],
+  ['mark-paper', 'ground'],
+  ['mark-paper', 'surface'],
+  ['on-brand', 'brand'],
 ];
