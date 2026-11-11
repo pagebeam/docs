@@ -4,14 +4,16 @@
  * with literal colours in exported files.
  *
  * Roles: paper (the page), line (text lines), brand (margin bar, beam, rays),
- * cut (the ground behind the mark, used to separate the beam from the page).
+ * on (the line the beam lights), cut (the ground behind the mark, used to
+ * separate the beam from the page).
  */
 
 export const cssPaint = {
   paper: 'var(--mark-paper)',
   line: 'var(--mark-line)',
   brand: 'var(--brand)',
-  cut: 'var(--surface)',
+  on: 'var(--on-brand)',
+  cut: 'var(--mark-cut)',
 };
 
 // B9: the margin bar is 12 tall on y 22..34; the beam is 80% of it, centred
@@ -21,7 +23,6 @@ const BEAM_H = BAR.h * 0.8;
 const BEAM_Y = BAR.y + (BAR.h - BEAM_H) / 2;
 const BEAM_END = 62;
 const BEAM_R = 1.5;
-const BEAM_OPACITY = 0.28;
 
 function beamPath() {
   const x0 = BAR.x + BAR.w;
@@ -31,15 +32,19 @@ function beamPath() {
   return `M${x0} ${f(BEAM_Y)} H${BEAM_END - r} A${r} ${r} 0 0 1 ${BEAM_END} ${f(BEAM_Y + r)} V${f(y1 - r)} A${r} ${r} 0 0 1 ${BEAM_END - r} ${f(y1)} H${x0} Z`;
 }
 
+// The page is solid and every line is fully opaque, so the mark stays sharp at
+// favicon size. The beam is outlined in the ground colour where it crosses the
+// page, which separates the two whatever their contrast, and the line it lights
+// is drawn over it.
 const b9 = (p) =>
   [
     `<rect x="14" y="6" width="44" height="52" rx="8" fill="${p.paper}"/>`,
-    `<rect x="22" y="15" width="28" height="4" rx="2" fill="${p.line}" opacity="0.3"/>`,
-    `<rect x="22" y="26" width="22" height="4" rx="2" fill="${p.line}"/>`,
-    `<rect x="22" y="37" width="26" height="4" rx="2" fill="${p.line}" opacity="0.3"/>`,
-    `<rect x="22" y="47" width="18" height="4" rx="2" fill="${p.line}" opacity="0.3"/>`,
+    `<rect x="22" y="14" width="28" height="4" rx="2" fill="${p.line}"/>`,
+    `<rect x="22" y="40" width="26" height="4" rx="2" fill="${p.line}"/>`,
+    `<rect x="22" y="48" width="18" height="4" rx="2" fill="${p.line}"/>`,
     `<rect x="${BAR.x}" y="${BAR.y}" width="${BAR.w}" height="${BAR.h}" rx="2.5" fill="${p.brand}"/>`,
-    `<path d="${beamPath()}" fill="${p.brand}" opacity="${BEAM_OPACITY}"/>`,
+    `<path d="${beamPath()}" fill="${p.brand}" stroke="${p.cut}" stroke-width="1.5" paint-order="stroke"/>`,
+    `<rect x="22" y="26" width="22" height="4" rx="2" fill="${p.on}"/>`,
   ].join('');
 
 const c2 = (p) =>
