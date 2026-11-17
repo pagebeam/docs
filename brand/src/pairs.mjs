@@ -9,6 +9,7 @@ export const textPairs = [
   ['ink', 'brand-soft'],
   ['brand-ink', 'brand-soft'],
   ['on-brand', 'brand'],
+  ['logo-ink', 'logo-plate'],
   ['band-dark-ink', 'band-dark'],
   ['band-dark-muted', 'band-dark'],
   ['band-dark-brand', 'band-dark'],
