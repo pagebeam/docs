@@ -75,7 +75,7 @@ Who a journey signs in as. pagebeam signs each account in once per run and reuse
 | Setting    | Meaning                                                                              |
 | ---------- | ------------------------------------------------------------------------------------ |
 | `purpose`  | What this account is for, in words. Required                                         |
-| `login`    | How to sign in: a `form`, a `script`, or both. Required                              |
+| `login`    | How to sign in: a `form`, a `script`, both, or `anonymous: true`. Required           |
 | `confirm`  | A selector only a signed-in page has. Required                                       |
 | `fresh`    | `true` makes a new user with the seed on every run, for screens only a new user sees |
 | `seed`     | The command that prepares this account, and the targets it may run on                |
@@ -86,6 +86,16 @@ Who a journey signs in as. pagebeam signs each account in once per run and reuse
 `form` names the login page and the selectors of its username field, password field and submit button. The username and password come from the environment variables named in `usernameEnv` and `passwordEnv`, or from the seed for a fresh account. The config holds the names of the variables, never their values.
 
 `script` is a module whose default export is given the page and the credentials, `{ username, password }`, and signs in on it. Use it for anything a form cannot do, such as a second factor. With both, the form is filled first and the script runs after it.
+
+For a public site, or the pages people see before they sign in, use `login: { anonymous: true }`. Nothing is filled in, and `confirm` names something the page always shows, such as `body`:
+
+```yaml
+accounts:
+  visitor:
+    purpose: anyone, signed out
+    login: { anonymous: true }
+    confirm: body
+```
 
 After signing in, pagebeam waits for `confirm`. If it never appears, the run stops with `account "writer" did not sign in`, so a login page that rejected the password is never saved as a screenshot of the product.
 
@@ -125,19 +135,46 @@ The steps to follow, signed in as `account`. A journey starts at the target's ad
 
 Each step does exactly one thing:
 
-| Step                                          | Does                                                         |
-| --------------------------------------------- | ------------------------------------------------------------ |
-| `goto: /path`                                 | Opens a path on the target                                   |
-| `click: selector`                             | Clicks the first match                                       |
-| `fill: { selector, value }`                   | Types `value`. Use `valueEnv` to take it from a variable     |
-| `select: { selector, value }`                 | Picks an option in a `select`                                |
-| `wait: selector` or `wait: 500`               | Waits for an element to show, or for milliseconds            |
-| `expect: { selector, text? }`                 | Stops the run unless the element shows, with `text` if given |
-| `shot: { name, caption?, focus?, fullPage? }` | Saves a screenshot                                           |
+| Step                                          | Does                                                                                                    |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `goto: /path`                                 | Opens a path on the target                                                                              |
+| `click: selector`                             | Clicks the first match                                                                                  |
+| `fill: { selector, value }`                   | Types `value`. Use `valueEnv` to take it from a variable                                                |
+| `select: { selector, value }`                 | Picks an option in a `select`                                                                           |
+| `press: key`                                  | Presses a key, such as `Enter` or `Control+K`                                                           |
+| `type: text`                                  | Types into whatever has focus. `{ valueEnv }` reads a variable                                          |
+| `scroll: { y, x?, selector? }`                | Turns the mouse wheel by `x` and `y` pixels, over `selector` if given, else over the middle of the page |
+| `verify: path`                                | Runs a module whose default export is given the page, and stops the run if it throws                    |
+| `wait: selector` or `wait: 500`               | Waits for an element to show, or for milliseconds                                                       |
+| `expect: { selector, text? }`                 | Stops the run unless the element shows, with `text` if given                                            |
+| `shot: { name, caption?, focus?, fullPage? }` | Saves a screenshot                                                                                      |
+
+Pages that load content as you scroll, such as images further down or infinite lists, need `scroll` steps before the shot so that content is there when it is taken:
+
+```yaml
+steps:
+  - goto: /
+  - scroll: { y: 1200 }
+  - wait: 800
+  - scroll: { y: 1200 }
+  - wait: 800
+  - shot: { name: home, fullPage: true }
+```
 
 Any step can also carry `note`: what it does and why, in words. A note is never spoken or shown. It is copied into the manifest, so a script for a recording can be written from it.
 
 Steps run again for each viewport, so a step that creates something creates it once per viewport.
+
+## Browser
+
+Journeys run in Chromium unless `tours.browser` says `firefox`. `--browser chromium` or `--browser firefox` on `shoot` overrides it for one run.
+
+```yaml
+tours:
+  browser: firefox
+```
+
+Firefox runs on Playwright's own build of it (`npx playwright-core install firefox`); a Firefox installed on the system cannot be driven. Set `PAGEBEAM_INSTALL_BROWSERS=1` to have pagebeam install it the first time it is needed. A journey with `record` needs Chromium and is refused in Firefox. The manifest says which browser took each shot.
 
 ## Output
 
