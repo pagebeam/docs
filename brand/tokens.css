@@ -25,6 +25,10 @@
   --band-dark-raised: oklch(26.5% 0.02 265);
   --band-dark-brand: oklch(78% 0.14 345);
   --band-mist: oklch(92.8% 0.01 265);
+  /* Customer logos are full colour drawn for light pages, so their plate stays light in both themes. */
+  --logo-plate: oklch(99% 0.003 265);
+  --logo-line: oklch(88% 0.008 265);
+  --logo-ink: oklch(36% 0.018 265);
 
   --hero-from: oklch(24% 0.02 265);
   --hero-to: oklch(50% 0.2 348);
@@ -76,8 +80,8 @@
 
   --hero: linear-gradient(135deg, var(--hero-from) 0%, var(--hero-to) 100%);
 
-  --radius-control: 4px;
-  --radius-card: 8px;
+  --radius-control: 6px;
+  --radius-card: 12px;
   --radius-pill: 999px;
 
   --space-1: 4px;
@@ -92,8 +96,8 @@
   --cell-y: 6px;
   --cell-x: 10px;
 
-  --font-sans: 'Ubuntu', system-ui, sans-serif;
-  --font-mono: 'Ubuntu Mono', ui-monospace, monospace;
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
 
   --ease: cubic-bezier(0.2, 0, 0, 1);
   --dur: 150ms;
